@@ -38,8 +38,9 @@ public class FacultyController {
         return ResponseEntity.ok(faculty);
     }
     @DeleteMapping("{id}") //DELETE  http://localhost:8080/faculty/1
-    public Faculty deleteFaculty(@RequestBody @PathVariable Long id){
-        return facultyService.deleteFaculty(id);
+    public ResponseEntity deleteFaculty(@RequestBody @PathVariable Long id){
+        facultyService.deleteFaculty(id);
+        return ResponseEntity.ok().build();
     }
     @GetMapping //READ  http://localhost:8080/faculty
     public ResponseEntity<Collection<Faculty>> getAllFaculties(){

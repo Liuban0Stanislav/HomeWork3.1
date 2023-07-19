@@ -17,6 +17,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.util.AssertionErrors.assertNull;
@@ -96,7 +97,7 @@ public class StudentServiceTest {
                 new Student(3L, "Bik", 15)
         ));
 
-        Mockito.when(studentRepository.findAll()).thenReturn(expextedList1);
+        Mockito.when(studentRepository.findStudentByAge(15)).thenReturn(expextedList1);
         assertEquals(expextedList1, studentService.getStudentsAccordingAge(15));
 
         List<Student>expextedList2 = new ArrayList<>(List.of(
@@ -104,7 +105,7 @@ public class StudentServiceTest {
                 new Student(4L, "Mik", 25)
         ));
 
-        Mockito.when(studentRepository.findAll()).thenReturn(expextedList2);
+        Mockito.when(studentRepository.findStudentByAge(25)).thenReturn(expextedList2);
         assertEquals(expextedList2, studentService.getStudentsAccordingAge(25));
     }
 }

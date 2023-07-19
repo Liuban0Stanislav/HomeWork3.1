@@ -41,10 +41,6 @@ public class FacultyService {
     }
 
     public List<Faculty> getFacultyAccordingColor(String color) {
-        List<Faculty> facultyList = facultyRepository.findAll();
-                facultyList = facultyList.stream()
-                .filter(faculty -> faculty.getColor().equals(color))
-                .collect(Collectors.toList());
-        return facultyList;
+       return facultyRepository.findByColor(color);
     }
 }

@@ -40,7 +40,11 @@ public class FacultyService {
         return facultyRepository.findAll();
     }
 
-    public List<Faculty> getFacultyAccordingColor(String color) {
-       return facultyRepository.findByColor(color);
+    public List<Faculty> getFacultyAccordingName(String name) {
+       return facultyRepository.findFacultyByNameContainingIgnoreCase(name);
     }
+    public List<Faculty> getFacultyAccordingColor(String color) {
+        return facultyRepository.findFacultyByColorContainsIgnoreCase(color);
+    }
+
 }

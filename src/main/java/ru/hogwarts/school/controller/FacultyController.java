@@ -48,7 +48,14 @@ public class FacultyController {
     }
 
     @GetMapping("/filter_by_color") //READ  http://localhost:8080/faculty/filter_by_color
-    public List<Faculty> getFacultyAccordingColor(@RequestParam String color){
-        return facultyService.getFacultyAccordingColor(color);
+    public ResponseEntity getFacultyAccordingNameOrColor(@RequestParam(required = false, name = "name") String name,
+                                                        @RequestParam(required = false, name = "color") String color){
+        if (name != null && !name.isEmpty() && !name.isBlank()) {
+            return ResponseEntity.ok(facultyService.getFacultyAccordingName(name));
+        }
+        if(color != null && !color.isEmpty() && !color.isBlank()){
+            return ResponseEntity.ok(facultyService.getFacultyAccordingColor(color));
+        }
+        return getAllFaculties();
     }
 }

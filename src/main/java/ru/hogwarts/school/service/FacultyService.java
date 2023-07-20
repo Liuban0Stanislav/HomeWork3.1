@@ -48,6 +48,6 @@ public class FacultyService {
     }
 
     public Faculty findFacultyByStudent(Student student) {
-        return facultyRepository.findFacultyByStudents(student);
+        return facultyRepository.findFacultyByStudent(student);
     }
 }

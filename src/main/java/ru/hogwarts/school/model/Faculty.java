@@ -11,7 +11,7 @@ public class Faculty {
     private String name;
     private String color;
     @OneToMany (mappedBy = "faculty")
-    private List<Student> students;
+    private List<Student> student;
 
     public Faculty() {
     }

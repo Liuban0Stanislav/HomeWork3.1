@@ -1,5 +1,7 @@
 select * from student;
 
+select * from faculty;
+
 select name, age from student
 where age > 30 and age < 40;
 
@@ -15,4 +17,6 @@ select name, age from student
 group by name, age;
 
 select * from student, faculty;
+
+
 

@@ -47,7 +47,7 @@ public class FacultyService {
         return facultyRepository.findFacultyByColorContainsIgnoreCase(color);
     }
 
-    public Student findFacultyByStudent(Student student) {
+    public Faculty findFacultyByStudent(Student student) {
         return facultyRepository.findFacultyByStudents(student);
     }
 }

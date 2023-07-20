@@ -60,7 +60,7 @@ public class FacultyController {
     }
 
     @GetMapping("/find_faculty_by_student")
-    public Student findFacultyByStudent (@RequestBody Student student){
+    public Faculty findFacultyByStudent (@RequestBody Student student){
         return facultyService.findFacultyByStudent(student);
     }
 }

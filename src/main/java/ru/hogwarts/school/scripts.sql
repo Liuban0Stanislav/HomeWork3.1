@@ -13,6 +13,9 @@ where name ilike '%a%';
 select * from student
 where age < 37;
 
+select * from student
+order by age;
+
 select name, age from student
 group by name, age;
 

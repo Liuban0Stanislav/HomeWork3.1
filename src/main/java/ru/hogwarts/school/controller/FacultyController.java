@@ -58,4 +58,9 @@ public class FacultyController {
         }
         return getAllFaculties();
     }
+
+    @GetMapping("/find_faculty_by_student")
+    public Student findFacultyByStudent (@RequestBody Student student){
+        return facultyService.findFacultyByStudent(student);
+    }
 }

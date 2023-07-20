@@ -58,7 +58,7 @@ public class StudentController {
         return studentService.findStudentByAgeBetween(minAge, maxAge);
     }
     @GetMapping("/find_student_by_faculty")
-    public List<Student> findStudentByFaculty(@RequestParam String name){
-        return studentService.findStudentByFaculty(name);
+    public List<Student> findStudentByFaculty(Faculty faculty){
+        return studentService.findStudentByFaculty(faculty);
     }
 }

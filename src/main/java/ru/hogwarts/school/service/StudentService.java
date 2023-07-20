@@ -46,7 +46,7 @@ public class StudentService {
         return studentRepository.findStudentByAgeBetween(minAge, maxAge);
     }
 
-    public List<Student> findStudentByFaculty(String name){
-        return studentRepository.findStudentByFacultyContaining(name);
+    public List<Student> findStudentByFaculty(Faculty faculty){
+        return studentRepository.findStudentByFaculty(faculty);
     }
 }

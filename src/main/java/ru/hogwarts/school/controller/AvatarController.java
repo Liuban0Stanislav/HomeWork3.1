@@ -31,6 +31,12 @@ public class AvatarController {
         return ResponseEntity.ok().build();
     }
 
+    @PostMapping(value = "/{studentId}/avatarFromInternet", consumes = MediaType.IMAGE_JPEG_VALUE)
+    public ResponseEntity<String> uploadAvatarFromInternet(@PathVariable Long studentId, @RequestParam String path, @RequestParam String avatarName) throws IOException {
+        avatarService.uploadAvatarFromInternet(studentId, path, avatarName);
+        return ResponseEntity.ok().build();
+    }
+
     @GetMapping("/{id}/avatar-from-db")
     public ResponseEntity <byte[]> downloadAvatar(@PathVariable Long id){
         Avatar avatar = avatarService.findAvatar(id);

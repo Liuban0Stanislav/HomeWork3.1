@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import ru.hogwarts.school.model.Avatar;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.repository.AvatarRepository;
@@ -13,6 +14,7 @@ import ru.hogwarts.school.repository.StudentRepository;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Optional;
 
 import static java.nio.file.StandardOpenOption.CREATE_NEW;
@@ -30,6 +32,47 @@ public class AvatarService {
     public AvatarService(AvatarRepository avatarRepository, StudentRepository studentRepository) {
         this.avatarRepository = avatarRepository;
         this.studentRepository = studentRepository;
+    }
+
+    public void uploadAvatarFromInternet(Long studentId, String path, String avatarName) throws IOException {
+        File avatarFile = new File(path);
+        Optional<Student> optionalStudent = studentRepository.findById(studentId);//получаем студента по id
+        if (optionalStudent.isPresent() && avatarFile == null) { //проверяем что не получили ноль
+            throw new IllegalArgumentException();
+        }
+        Student student = optionalStudent.orElse(null); //извлекаем студента из обертки Optional
+        String originalFileName = avatarName;//получаем имя файла аватарки
+
+        if (originalFileName == null) { //проверяем что имя аватарки действительно получено
+            throw new IllegalArgumentException();
+        }
+
+//        Path filePath = Path.of(avatarFile.getPath(), "аватар из интернета1");
+        Path filePath = Path.of(path);
+        Files.createDirectories(filePath.getParent());
+        Files.deleteIfExists(filePath);
+
+        try (
+                InputStream is = Files.newInputStream(avatarFile.toPath());//открываем поток из аватарки MultipartFile
+                OutputStream os = Files.newOutputStream(filePath, CREATE_NEW);
+                BufferedInputStream bis = new BufferedInputStream(is, 1024);
+                BufferedOutputStream bos = new BufferedOutputStream(os, 1024);
+        ) {
+            bis.transferTo(bos);
+        }
+
+        Avatar avatar = findAvatar(studentId);//получаем аватар по id студента
+        avatar.setStudent(student);// присваиваем в аватар id студента
+        avatar.setFilePath(filePath.toString()); //путь к файлу
+        avatar.setFileSize(avatarFile.length()); //размер файла
+
+        String fileType = Files.probeContentType(Paths.get(String.valueOf(filePath)));
+        avatar.setMediaType(fileType); //тип файла
+
+        byte[] fileBytes = Files.readAllBytes(Paths.get(String.valueOf(filePath)));
+        avatar.setData(fileBytes); //сохраняем массив байт в аватар (сохраняем саму картинку)
+        avatarRepository.save(avatar); //сохраняем в БД
+
     }
 
     public void uploadAvatar(Long studentId, MultipartFile avatarFile) throws IOException {

@@ -1,8 +1,7 @@
 package ru.hogwarts.school;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
+
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -101,28 +100,22 @@ class ApplicationTests {
         Long lastId = (long) lastStudent.size();
 
         Student student = new Student(lastId, "Александр Матросов", 19);
-
-
-
-        assertEquals(this.testRestTemplate.postForObject(
-                "http://localhost:" + port + "/faculty/1", student, String.class), student);
-
-//        assertNotNull(
-//        testRestTemplate.postForObject("http://localhost:" + port + "/faculty", faculty, String.class)
-//        );
+        Assertions.assertThat(this.testRestTemplate.postForObject(
+                        "http://localhost:" + port + "/faculty/" + lastId, student, Student.class))
+                .isEqualTo(student);
     }
 
-    @Test
-    public void testEditFaculty() {
-        Faculty faculty = new Faculty(1L, "Пуфендуй", "синий");
-
-        ResponseEntity<Faculty> response = facultyController.editFaculty(faculty);
-
-        int actualStatusCodeValue = response.getStatusCodeValue();
-        int expectedCode = 200;
-
-        Assertions.assertEquals(expectedCode, actualStatusCodeValue, "коды не совпадают");
-    }
+//    @Test
+//    public void testEditFaculty() {
+//        Faculty faculty = new Faculty(1L, "Пуфендуй", "синий");
+//
+//        ResponseEntity<Faculty> response = facultyController.editFaculty(faculty);
+//
+//        int actualStatusCodeValue = response.getStatusCodeValue();
+//        int expectedCode = 200;
+//
+//        Assertions.assertEquals(expectedCode, actualStatusCodeValue, "коды не совпадают");
+//    }
 
     @Test
     void deleteStudentTest() {

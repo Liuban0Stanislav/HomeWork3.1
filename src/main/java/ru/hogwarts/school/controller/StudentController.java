@@ -36,6 +36,7 @@ public class StudentController {
         if(edittingStudent == null){
             ResponseEntity.notFound().build();
         }
+        System.out.println("ResponseEntity " + ResponseEntity.ok(student));
         return ResponseEntity.ok(student);
     }
     @DeleteMapping("{id}") //DELETE  http://localhost:8080/student/1

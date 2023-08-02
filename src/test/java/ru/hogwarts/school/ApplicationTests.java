@@ -13,11 +13,19 @@ import ru.hogwarts.school.controller.FacultyController;
 import ru.hogwarts.school.controller.StudentController;
 import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
+import ru.hogwarts.school.repository.FacultyRepository;
+import ru.hogwarts.school.repository.StudentRepository;
+import ru.hogwarts.school.service.StudentService;
 
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.test.util.AssertionErrors.assertEquals;
 
@@ -26,6 +34,11 @@ class ApplicationTests {
 
     @LocalServerPort
     private int port;
+
+    @Autowired
+    StudentRepository studentRepository;
+    @Autowired
+    FacultyRepository facultyRepository;
 
     @Autowired
     private StudentController studentController;
@@ -41,11 +54,11 @@ class ApplicationTests {
     private static Long studentTestId;
     private static Long facultyTestId;
 
-    @BeforeAll
-    static void setUp() {
-        student = new Student(1L, "Василий Теркин", 23);
-        faculty = new Faculty(1L, "Грипенкашль", "малиновый");
-    }
+//    @BeforeAll
+//    static void setUp() {
+//
+//
+//    }
 
     @Test
     void contextLoads() throws Exception {
@@ -54,48 +67,53 @@ class ApplicationTests {
     }
 
     @Test
-    void testPostStudent() throws Exception {
+    void testPostStudent() {
+        student = new Student(1L, "Василий Теркин", 23);
+
         assertNotNull(this.testRestTemplate.postForObject(
                 "http://localhost:" + port + "/student", student, String.class));
 
     }
 
     @Test
-    void testPostFaculty() throws Exception {
+    void testPostFaculty() {
+        faculty = new Faculty(1L, "Грипенкашль", "малиновый");
+
         assertNotNull(this.testRestTemplate.postForObject(
                 "http://localhost:" + port + "/faculty", faculty, String.class));
-
     }
 
     @Test
-    public void testEditStudent() throws URISyntaxException {
-        Student student = new Student(1L, "Андрей Пивоваров", 25);
-
-        ResponseEntity<Student> response = studentController.editStudent(student);
-
-//
-//        int actualStatusCodeValue = response.getStatusCodeValue();
-//        int expectedCode = 200;
-//
-//        Assertions.assertEquals(expectedCode, actualStatusCodeValue, "коды не совпадают");
-
-        Long idChange = 2L;
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.set("Changing mathod", "done");
-
-        URI uri = new URI("http://localhost:" + port + "/student");
-        RequestEntity<URI> requestEntity = RequestEntity.post(uri);
-testRestTemplate.exchange((RequestEntity<?>) RequestEntity.post(uri), Student.class);
-//        assertNotNull(this.testRestTemplate.exchange("http://localhost:" + port + "/student" + idChange,
-//                HttpMethod.PUT,
-//                new HttpEntity<>(headers),
-//                Student.class));
+    void findStudent() {
+        assertNotNull(this.testRestTemplate.getForObject(
+                "http://localhost:" + port + "/student/1", String.class));
     }
 
     @Test
-    public void testEditFacuty() {
+    void findFaculty() {
+        assertNotNull(this.testRestTemplate.getForObject(
+                "http://localhost:" + port + "/faculty/1", String.class));
+    }
+
+    @Test
+    public void testEditStudent() {
+        List<Student>lastStudent = studentRepository.findAll();
+        Long lastId = (long) lastStudent.size();
+
+        Student student = new Student(lastId, "Александр Матросов", 19);
+
+
+
+        assertEquals(this.testRestTemplate.postForObject(
+                "http://localhost:" + port + "/faculty/1", student, String.class), student);
+
+//        assertNotNull(
+//        testRestTemplate.postForObject("http://localhost:" + port + "/faculty", faculty, String.class)
+//        );
+    }
+
+    @Test
+    public void testEditFaculty() {
         Faculty faculty = new Faculty(1L, "Пуфендуй", "синий");
 
         ResponseEntity<Faculty> response = facultyController.editFaculty(faculty);

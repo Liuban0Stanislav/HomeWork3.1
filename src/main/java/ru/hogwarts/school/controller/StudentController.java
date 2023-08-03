@@ -30,7 +30,7 @@ public class StudentController {
         }
         return ResponseEntity.ok(student);
     }
-    @PutMapping("{id}") //UPDATE  http://localhost:8080/student/1
+    @PutMapping //UPDATE  http://localhost:8080/student/
     public ResponseEntity<Student> editStudent(@RequestBody Student student){
         Student edittingStudent = studentService.editStudent(student);
         if(edittingStudent == null){

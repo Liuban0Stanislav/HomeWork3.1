@@ -22,14 +22,14 @@ public class FacultyController {
         return facultyService.createFaculty(faculty);
     }
     @GetMapping("{id}") //READ  http://localhost:8080/faculty/1
-    public ResponseEntity<Faculty> findFaculty(@RequestBody @PathVariable Long id){
+    public ResponseEntity<Faculty> findFaculty(@PathVariable Long id){
         Faculty faculty = facultyService.findFaculty(id);
         if(faculty == null){
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(faculty);
     }
-    @PutMapping("{id}") //UPDATE  http://localhost:8080/faculty
+    @PutMapping //UPDATE  http://localhost:8080/faculty
     public ResponseEntity<Faculty> editFaculty(@RequestBody Faculty faculty){
         Faculty editiedFaculty = facultyService.editFaculty(faculty);
         if(editiedFaculty == null){

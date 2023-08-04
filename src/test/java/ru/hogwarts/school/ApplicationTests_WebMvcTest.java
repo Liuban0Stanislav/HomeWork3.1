@@ -180,7 +180,7 @@ class ApplicationTests_WebMvcTest {
 
         Student student = new Student(id, name, age);
 
-        when(studentRepository.getById(any(Long.class))).thenReturn(student);
+        when(studentRepository.findById(any(Long.class))).thenReturn(Optional.of(student));
 
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/student/1")

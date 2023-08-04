@@ -13,7 +13,7 @@ import java.util.List;
 @RestController
 @RequestMapping("student")
 public class StudentController {
-    private StudentService studentService;
+    private final StudentService studentService;
 
     public StudentController(StudentService studentService) {
         this.studentService = studentService;
@@ -23,8 +23,8 @@ public class StudentController {
         return studentService.createStudent(student);
     }
     @GetMapping("{id}") //READ  http://localhost:8080/student/1
-    public ResponseEntity<Student> findStudent( @PathVariable Long id){
-        Student student = studentService.findStudent(id);
+    public ResponseEntity<Student> findStudent(@PathVariable Long id){
+        Student student = studentService.findStudent(id).orElse(null);
         if(student == null){
             return ResponseEntity.notFound().build();
         }

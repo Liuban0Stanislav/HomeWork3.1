@@ -23,7 +23,7 @@ public class FacultyController {
     }
     @GetMapping("{id}") //READ  http://localhost:8080/faculty/1
     public ResponseEntity<Faculty> findFaculty(@PathVariable Long id){
-        Faculty faculty = facultyService.findFaculty(id);
+        Faculty faculty = facultyService.findFaculty(id).orElse(null);
         if(faculty == null){
             return ResponseEntity.notFound().build();
         }
@@ -38,7 +38,7 @@ public class FacultyController {
         return ResponseEntity.ok(faculty);
     }
     @DeleteMapping("{id}") //DELETE  http://localhost:8080/faculty/1
-    public ResponseEntity deleteFaculty(@RequestBody @PathVariable Long id){
+    public ResponseEntity deleteFaculty(@PathVariable Long id){
         facultyService.deleteFaculty(id);
         return ResponseEntity.ok().build();
     }

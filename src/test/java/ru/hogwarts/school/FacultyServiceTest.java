@@ -44,24 +44,24 @@ public class FacultyServiceTest {
     public void findFacultyTest(){
         Mockito.when(facultyRepository.getById(1L)).thenReturn(expectedFaculty);
 
-        assertEquals(expectedFaculty.getName(), facultyService.findFaculty(1L).getName());
-        assertEquals(expectedFaculty.getColor(), facultyService.findFaculty(1L).getColor());
+        assertEquals(expectedFaculty.getName(), facultyService.findFaculty(1L).get().getName());
+        assertEquals(expectedFaculty.getColor(), facultyService.findFaculty(1L).get().getColor());
     }
 
     @Test
     public void editFacultyTest(){
         Mockito.when(facultyRepository.getById(1L)).thenReturn(expectedFaculty);
 
-        assertEquals(expectedFaculty.getName(), facultyService.findFaculty(1L).getName());
-        assertEquals(expectedFaculty.getColor(), facultyService.findFaculty(1L).getColor());
+        assertEquals(expectedFaculty.getName(), facultyService.findFaculty(1L).get().getName());
+        assertEquals(expectedFaculty.getColor(), facultyService.findFaculty(1L).get().getColor());
 
         Faculty newFaculty = new Faculty(1L,"Пупкодуй", "синий");
         facultyService.editFaculty(newFaculty);
 
         Mockito.when(facultyRepository.getById(1L)).thenReturn(newFaculty);
 
-        assertEquals(newFaculty.getName(), facultyService.findFaculty(1L).getName());
-        assertEquals(newFaculty.getColor(), facultyService.findFaculty(1L).getColor());
+        assertEquals(newFaculty.getName(), facultyService.findFaculty(1L).get().getName());
+        assertEquals(newFaculty.getColor(), facultyService.findFaculty(1L).get().getColor());
     }
     @Test
     public void deleteStudentTest(){

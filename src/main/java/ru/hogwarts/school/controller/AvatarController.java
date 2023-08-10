@@ -20,6 +20,7 @@ import java.util.List;
 @RestController
 @RequestMapping("avatar")
 public class AvatarController {
+    //куку
     private AvatarService avatarService;
 
     public AvatarController(AvatarService avatarService) {

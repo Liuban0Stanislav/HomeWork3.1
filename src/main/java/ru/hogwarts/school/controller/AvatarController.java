@@ -64,6 +64,6 @@ public class AvatarController {
     public ResponseEntity<List<Avatar>> getAllAvatars(@RequestParam("page") int pageNumber,
                                                       @RequestParam("size") int pageSize) {
         List<Avatar> avatars = avatarService.getAllAvatars(pageNumber, pageSize);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(avatars);
     }
 }

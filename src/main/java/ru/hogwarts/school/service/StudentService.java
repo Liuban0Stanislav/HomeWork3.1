@@ -60,4 +60,8 @@ public class StudentService {
     public List<FiveLastStudents> getFiveLastStudents() {
         return studentRepository.getFiveLastStudents();
     }
+
+    public List<Student> findStudentByName(String name) {
+        return studentRepository.findStudentByNameContainingIgnoreCase(name);
+    }
 }

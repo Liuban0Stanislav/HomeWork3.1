@@ -47,4 +47,8 @@ public class FacultyService {
     public Faculty findFacultyByStudent(Student student) {
         return facultyRepository.findFacultyByStudent(student);
     }
+
+    public List<Faculty> findFacultyByNameAndColor(String name, String color){
+        return facultyRepository.findFacultyByNameContainingIgnoreCaseAndColorContainingIgnoreCase(name, color);
+    }
 }

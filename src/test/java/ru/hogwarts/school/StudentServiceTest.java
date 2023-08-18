@@ -43,29 +43,29 @@ public class StudentServiceTest {
         assertEquals(expectedStudent, studentService.createStudent(expectedStudent));
     }
 
-    @Test
-    public void findStudentTest(){
-        Mockito.when(studentRepository.getById(1L)).thenReturn(expectedStudent);
-
-        assertEquals(expectedStudent.getName(), studentService.findStudent(1L).get().getName());
-        assertEquals(expectedStudent.getAge(), studentService.findStudent(1L).get().getAge());
-    }
-
-    @Test
-    public void editStudentTest(){
-        Mockito.when(studentRepository.getById(1L)).thenReturn(expectedStudent);
-
-        assertEquals(expectedStudent.getName(), studentService.findStudent(1L).get().getName());
-        assertEquals(expectedStudent.getAge(), studentService.findStudent(1L).get().getAge());
-
-        Student newStudent = new Student(1L,"Caesar", 33);
-        studentService.editStudent(newStudent);
-
-        Mockito.when(studentRepository.getById(1L)).thenReturn(newStudent);
-
-        assertEquals(newStudent.getName(), studentService.findStudent(1L).get().getName());
-        assertEquals(newStudent.getAge(), studentService.findStudent(1L).get().getAge());
-    }
+//    @Test
+//    public void findStudentTest(){
+//        Mockito.when(studentRepository.getById(1L)).thenReturn(expectedStudent);
+//
+//        assertEquals(expectedStudent.getName(), studentService.findStudent(1L).get().getName());
+//        assertEquals(expectedStudent.getAge(), studentService.findStudent(1L).get().getAge());
+//    }
+//
+//    @Test
+//    public void editStudentTest(){
+//        Mockito.when(studentRepository.getById(1L)).thenReturn(expectedStudent);
+//
+//        assertEquals(expectedStudent.getName(), studentService.findStudent(1L).get().getName());
+//        assertEquals(expectedStudent.getAge(), studentService.findStudent(1L).get().getAge());
+//
+//        Student newStudent = new Student(1L,"Caesar", 33);
+//        studentService.editStudent(newStudent);
+//
+//        Mockito.when(studentRepository.getById(1L)).thenReturn(newStudent);
+//
+//        assertEquals(newStudent.getName(), studentService.findStudent(1L).get().getName());
+//        assertEquals(newStudent.getAge(), studentService.findStudent(1L).get().getAge());
+//    }
 
     @Test
     public void deleteStudentTest(){

@@ -1,6 +1,7 @@
 package ru.hogwarts.school.service;
 
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -10,6 +11,7 @@ import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.repository.StudentRepository;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class StudentService {
@@ -52,12 +54,12 @@ public class StudentService {
         return studentRepository.findStudentByAge(age);
     }
 
-    public List<Student> findStudentByAgeBetween(int minAge, int maxAge){
+    public List<Student> findStudentByAgeBetween(int minAge, int maxAge) {
         logger.debug("Вызван метод findStudentByAgeBetween");
         return studentRepository.findStudentByAgeBetween(minAge, maxAge);
     }
 
-    public List<Student> findStudentByFaculty(Faculty faculty){
+    public List<Student> findStudentByFaculty(Faculty faculty) {
         logger.debug("Вызван метод findStudentByFaculty");
         return studentRepository.findStudentByFaculty(faculty);
     }
@@ -80,5 +82,22 @@ public class StudentService {
     public List<Student> findStudentByName(String name) {
         logger.debug("Вызван метод findStudentByName");
         return studentRepository.findStudentByNameContainingIgnoreCase(name);
+    }
+
+    public List<Student> getStudentsAlphabetOrder() {
+        return studentRepository.findAll().stream()
+                .map(student -> new Student(student.getId(),
+                        StringUtils.capitalize(student.getName()),
+                        student.getAge()))
+                .filter(student -> student.getName().startsWith("А"))
+                .sorted(Comparator.comparing(Student::getName))
+                .collect(Collectors.toList());
+    }
+
+    public double getMiddleAgeOfStudents() {
+        return studentRepository.findAll().stream()
+                .mapToDouble(Student::getAge)
+                .average()
+                .orElse(0d);
     }
 }

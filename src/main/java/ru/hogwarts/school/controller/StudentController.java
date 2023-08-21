@@ -85,4 +85,14 @@ public class StudentController {
         List<Student> students = studentService.findStudentByName(name);
         return ResponseEntity.ok(students);
     }
+
+    @GetMapping("/get_students_alphabetic_order")
+    public Collection<Student> getStudentAlphabeticOrder(){
+        return studentService.getStudentsAlphabetOrder();
+    }
+
+    @GetMapping("/get_students_middle_age")
+    public double getMiddleAgeOfStudents(){
+        return studentService.getMiddleAgeOfStudents();
+    }
 }

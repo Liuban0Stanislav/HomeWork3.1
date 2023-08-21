@@ -10,6 +10,7 @@ import ru.hogwarts.school.repository.FacultyRepository;
 import javax.annotation.PostConstruct;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class FacultyService {
@@ -64,5 +65,18 @@ public class FacultyService {
     public List<Faculty> findFacultyByNameAndColor(String name, String color) {
         logger.debug("Вызван метод findFacultyByNameAndColor");
         return facultyRepository.findFacultyByNameContainingIgnoreCaseAndColorContainingIgnoreCase(name, color);
+    }
+
+    public Faculty getLongestFacultyName() {
+        return facultyRepository.findAll().stream()
+                .max(Comparator.comparing(faculty -> faculty.getName().length()))
+                .orElse(null);
+    }
+
+    public int getIntegerNumber() {
+        return Stream
+                .iterate(1, a -> a + 1)
+                .limit(1_000_000)
+                .reduce(0, (a, b) -> a + b);
     }
 }

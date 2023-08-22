@@ -14,12 +14,12 @@ import ru.hogwarts.school.service.StudentService;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.util.AssertionErrors.assertNull;
 
 @ExtendWith(MockitoExtension.class)
@@ -27,7 +27,14 @@ public class StudentServiceTest {
     private StudentService studentService;
     @Mock
     private StudentRepository studentRepository;
-    Student expectedStudent;
+    private Student expectedStudent;
+
+    private final List<Student> sourceStudentsList = new ArrayList<>(List.of(
+            new Student(1L, "аd_testStudent4", 45),
+            new Student(2L, "аb_testStudent2", 45),
+            new Student(3L, "аc_testStudent3", 45),
+            new Student(4L, "аa_testStudent1", 45)
+    ));
 
     @BeforeEach
     public void BeforeEach(){
@@ -43,29 +50,32 @@ public class StudentServiceTest {
         assertEquals(expectedStudent, studentService.createStudent(expectedStudent));
     }
 
-//    @Test
-//    public void findStudentTest(){
-//        Mockito.when(studentRepository.getById(1L)).thenReturn(expectedStudent);
-//
-//        assertEquals(expectedStudent.getName(), studentService.findStudent(1L).get().getName());
-//        assertEquals(expectedStudent.getAge(), studentService.findStudent(1L).get().getAge());
-//    }
-//
-//    @Test
-//    public void editStudentTest(){
-//        Mockito.when(studentRepository.getById(1L)).thenReturn(expectedStudent);
-//
-//        assertEquals(expectedStudent.getName(), studentService.findStudent(1L).get().getName());
-//        assertEquals(expectedStudent.getAge(), studentService.findStudent(1L).get().getAge());
-//
-//        Student newStudent = new Student(1L,"Caesar", 33);
-//        studentService.editStudent(newStudent);
-//
-//        Mockito.when(studentRepository.getById(1L)).thenReturn(newStudent);
-//
-//        assertEquals(newStudent.getName(), studentService.findStudent(1L).get().getName());
-//        assertEquals(newStudent.getAge(), studentService.findStudent(1L).get().getAge());
-//    }
+    @Test
+    public void findStudentTest(){
+        Optional<Student> optionalStudent = Optional.ofNullable(expectedStudent);
+        Mockito.when(studentRepository.findById(1L)).thenReturn(optionalStudent);
+
+        assertEquals(expectedStudent.getName(), studentService.findStudent(1L).get().getName());
+        assertEquals(expectedStudent.getAge(), studentService.findStudent(1L).get().getAge());
+    }
+
+    @Test
+    public void editStudentTest(){
+        Optional<Student> optionalStudent = Optional.ofNullable(expectedStudent);
+        Mockito.when(studentRepository.findById(1L)).thenReturn(optionalStudent);
+
+        assertEquals(expectedStudent.getName(), studentService.findStudent(1L).get().getName());
+        assertEquals(expectedStudent.getAge(), studentService.findStudent(1L).get().getAge());
+
+        Student newStudent = new Student(2L,"Karl", 31);
+        Optional<Student> optionalStudent1 = Optional.ofNullable(newStudent);
+        studentService.editStudent(newStudent);
+
+        Mockito.when(studentRepository.findById(1L)).thenReturn(optionalStudent1);
+
+        assertEquals(newStudent.getName(), studentService.findStudent(1L).get().getName());
+        assertEquals(newStudent.getAge(), studentService.findStudent(1L).get().getAge());
+    }
 
     @Test
     public void deleteStudentTest(){
@@ -107,5 +117,26 @@ public class StudentServiceTest {
 
         Mockito.when(studentRepository.findStudentByAge(25)).thenReturn(expextedList2);
         assertEquals(expextedList2, studentService.getStudentsAccordingAge(25));
+    }
+
+    @Test
+    public void getStudentsAlphabetOrderTest() {
+        List<Student> expectedStudentsList = new ArrayList<>(List.of(
+                new Student(4L, "Аa_testStudent1", 45),
+                new Student(2L, "Аb_testStudent2", 45),
+                new Student(3L, "Аc_testStudent3", 45),
+                new Student(1L, "Аd_testStudent4", 45)
+        ));
+
+        when(studentRepository.findAll()).thenReturn(sourceStudentsList);
+
+        assertEquals(expectedStudentsList, studentService.getStudentsAlphabetOrder());
+    }
+
+    @Test
+    public void getMiddleAgeOfStudents() {
+        when(studentRepository.findAll()).thenReturn(sourceStudentsList);
+
+        assertEquals(45, studentService.getMiddleAgeOfStudents());
     }
 }

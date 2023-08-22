@@ -85,12 +85,13 @@ public class StudentService {
     }
 
     public List<Student> getStudentsAlphabetOrder() {
+        logger.debug("Вызван метод getStudentsAlphabetOrder");
         return studentRepository.findAll().stream()
                 .map(student -> new Student(student.getId(),
                         StringUtils.capitalize(student.getName()),
                         student.getAge()))
                 .filter(student -> student.getName().startsWith("А"))
-                .sorted(Comparator.comparing(Student::getName))
+                .sorted(Comparator.comparing(student -> student.getName()))
                 .collect(Collectors.toList());
     }
 

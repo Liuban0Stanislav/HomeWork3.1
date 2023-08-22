@@ -13,6 +13,7 @@ import ru.hogwarts.school.service.FacultyService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
@@ -28,6 +29,13 @@ public class FacultyServiceTest {
     private FacultyRepository facultyRepository;
     private Faculty expectedFaculty;
 
+    private final List<Faculty> sourceFacultyList = new ArrayList<>(List.of(
+            new Faculty(1L, "Ааааааааааааааа", "aaa"),
+            new Faculty(1L, "Бббббббббббб", "aaa"),
+            new Faculty(1L, "Ввввввввв", "aaa"),
+            new Faculty(1L, "Гггггг", "aaa")
+    ));
+
     @BeforeEach
     public void BeforeEach(){
         facultyService = new FacultyService(facultyRepository);
@@ -40,29 +48,33 @@ public class FacultyServiceTest {
 
         assertEquals(expectedFaculty, facultyService.createFaculty(expectedFaculty));
     }
-//    @Test
-//    public void findFacultyTest(){
-//        Mockito.when(facultyRepository.getById(1L)).thenReturn(expectedFaculty);
-//
-//        assertEquals(expectedFaculty.getName(), facultyService.findFaculty(1L).get().getName());
-//        assertEquals(expectedFaculty.getColor(), facultyService.findFaculty(1L).get().getColor());
-//    }
-//
-//    @Test
-//    public void editFacultyTest(){
-//        Mockito.when(facultyRepository.getById(1L)).thenReturn(expectedFaculty);
-//
-//        assertEquals(expectedFaculty.getName(), facultyService.findFaculty(1L).get().getName());
-//        assertEquals(expectedFaculty.getColor(), facultyService.findFaculty(1L).get().getColor());
-//
-//        Faculty newFaculty = new Faculty(1L,"Пупкодуй", "синий");
-//        facultyService.editFaculty(newFaculty);
-//
-//        Mockito.when(facultyRepository.getById(1L)).thenReturn(newFaculty);
-//
-//        assertEquals(newFaculty.getName(), facultyService.findFaculty(1L).get().getName());
-//        assertEquals(newFaculty.getColor(), facultyService.findFaculty(1L).get().getColor());
-//    }
+    @Test
+    public void findFacultyTest(){
+        Optional<Faculty>optionalFaculty = Optional.ofNullable(expectedFaculty);
+        Mockito.when(facultyRepository.findById(1L)).thenReturn(optionalFaculty);
+
+        assertEquals(expectedFaculty.getName(), facultyService.findFaculty(1L).get().getName());
+        assertEquals(expectedFaculty.getColor(), facultyService.findFaculty(1L).get().getColor());
+    }
+
+    @Test
+    public void editFacultyTest(){
+        Optional<Faculty>optionalFaculty = Optional.ofNullable(expectedFaculty);
+
+        Mockito.when(facultyRepository.findById(1L)).thenReturn(optionalFaculty);
+
+        assertEquals(expectedFaculty.getName(), facultyService.findFaculty(1L).get().getName());
+        assertEquals(expectedFaculty.getColor(), facultyService.findFaculty(1L).get().getColor());
+
+        Faculty newFaculty = new Faculty(1L,"Пупкодуй", "синий");
+        optionalFaculty = Optional.ofNullable(newFaculty);
+        facultyService.editFaculty(newFaculty);
+
+        Mockito.when(facultyRepository.findById(1L)).thenReturn(optionalFaculty);
+
+        assertEquals(newFaculty.getName(), facultyService.findFaculty(1L).get().getName());
+        assertEquals(newFaculty.getColor(), facultyService.findFaculty(1L).get().getColor());
+    }
     @Test
     public void deleteStudentTest(){
         facultyService.deleteFaculty(1L);
@@ -102,5 +114,18 @@ public class FacultyServiceTest {
 
         Mockito.when(facultyRepository.findFacultyByColorContainsIgnoreCase(anyString())).thenReturn(expectedList2);
         assertEquals(expectedList2, facultyService.getFacultyAccordingColor("зеленый"));
+    }
+
+    @Test
+    public void getLongestFacultyNameTest() {
+        when(facultyRepository.findAll()).thenReturn(sourceFacultyList);
+        Faculty expected = new Faculty(1L, "Ааааааааааааааа", "aaa" );
+
+        assertEquals(expected, facultyService.getLongestFacultyName());
+    }
+
+    @Test
+    public void getIntegerNumber() {
+        assertEquals(1784293664, facultyService.getIntegerNumber());
     }
 }

@@ -12,6 +12,7 @@ import ru.hogwarts.school.repository.StudentRepository;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class StudentService {
@@ -100,5 +101,43 @@ public class StudentService {
                 .mapToDouble(Student::getAge)
                 .average()
                 .orElse(0d);
+    }
+
+    public void doStudentsThread() {
+        System.out.println("Имя 0 студента: " + studentRepository.findAll().get(0).getName());
+        System.out.println("Имя 1 студента: " + studentRepository.findAll().get(1).getName());
+
+        Thread thread1 = new Thread(() -> {
+            System.out.println("Имя 2 студента: " + studentRepository.findAll().get(2).getName());
+            System.out.println("Имя 3 студента: " + studentRepository.findAll().get(3).getName());
+        });
+        thread1.start();
+
+        Thread thread2 = new Thread(() -> {
+            System.out.println("Имя 4 студента: " + studentRepository.findAll().get(4).getName());
+            System.out.println("Имя 5 студента: " + studentRepository.findAll().get(5).getName());
+        });
+        thread2.start();
+    }
+
+    public void doSynchronizedStudentsThread() {
+        System.out.println("Имя 0 студента: " + studentRepository.findAll().get(0).getName());
+        System.out.println("Имя 1 студента: " + studentRepository.findAll().get(1).getName());
+
+        Thread thread1 = new Thread(() -> {
+            synchronized (StudentService.class){
+            System.out.println("Имя 2 студента: " + studentRepository.findAll().get(2).getName());}
+            synchronized (StudentService.class){
+            System.out.println("Имя 3 студента: " + studentRepository.findAll().get(3).getName());}
+        });
+        thread1.start();
+
+        Thread thread2 = new Thread(() -> {
+            synchronized (StudentService.class){
+            System.out.println("Имя 4 студента: " + studentRepository.findAll().get(4).getName());}
+            synchronized (StudentService.class){
+            System.out.println("Имя 5 студента: " + studentRepository.findAll().get(5).getName());}
+        });
+        thread2.start();
     }
 }

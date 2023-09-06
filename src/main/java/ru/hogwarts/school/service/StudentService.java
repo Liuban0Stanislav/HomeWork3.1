@@ -26,117 +26,141 @@ public class StudentService {
     }
 
     public Student createStudent(Student student) {
-        logger.debug("Вызван метод createStudent");
+        logger.debug("Called method createStudent");
         return studentRepository.save(student);
     }
 
     public Optional<Student> findStudent(Long id) {
-        logger.debug("Вызван метод findStudent");
+        logger.debug("Called method findStudent");
         return studentRepository.findById(id);
     }
 
     public Student editStudent(Student student) {
-        logger.debug("Вызван метод editStudent");
+        logger.debug("Called method editStudent");
         return studentRepository.save(student);
     }
 
     public void deleteStudent(Long id) {
-        logger.debug("Вызван метод deleteStudent");
+        logger.debug("Called method deleteStudent");
         studentRepository.deleteById(id);
     }
 
     public Collection<Student> getAllStudents() {
-        logger.debug("Вызван метод getAllStudents");
+        logger.debug("Called method getAllStudents");
         return studentRepository.findAll();
     }
 
     public List<Student> getStudentsAccordingAge(int age) {
-        logger.debug("Вызван метод getStudentsAccordingAge");
+        logger.debug("Called method getStudentsAccordingAge");
         return studentRepository.findStudentByAge(age);
     }
 
     public List<Student> findStudentByAgeBetween(int minAge, int maxAge) {
-        logger.debug("Вызван метод findStudentByAgeBetween");
+        logger.debug("Called method findStudentByAgeBetween");
         return studentRepository.findStudentByAgeBetween(minAge, maxAge);
     }
 
     public List<Student> findStudentByFaculty(Faculty faculty) {
-        logger.debug("Вызван метод findStudentByFaculty");
+        logger.debug("Called method findStudentByFaculty");
         return studentRepository.findStudentByFaculty(faculty);
     }
 
     public List<Integer> getQuantityOfAllStudents() {
-        logger.debug("Вызван метод getQuantityOfAllStudents");
+        logger.debug("Called method getQuantityOfAllStudents");
         return studentRepository.getQuantityOfAllStudents();
     }
 
     public List<Double> getAverageAge() {
-        logger.debug("Вызван метод getAverageAge");
+        logger.debug("Called method getAverageAge");
         return studentRepository.getAverageAge();
     }
 
     public List<FiveLastStudents> getFiveLastStudents() {
-        logger.debug("Вызван метод getFiveLastStudents");
+        logger.debug("Called method getFiveLastStudents");
         return studentRepository.getFiveLastStudents();
     }
 
     public List<Student> findStudentByName(String name) {
-        logger.debug("Вызван метод findStudentByName");
+        logger.debug("Called method findStudentByName");
         return studentRepository.findStudentByNameContainingIgnoreCase(name);
     }
 
+    /**
+     * The method capitalise first letters of student's names,
+     * then looking all students whose name start from "A",
+     * and then sort them in alphabetic order. Collection of sorted
+     * students returns from method.
+     */
     public List<Student> getStudentsAlphabetOrder() {
-        logger.debug("Вызван метод getStudentsAlphabetOrder");
+        logger.debug("Called method getStudentsAlphabetOrder");
         return studentRepository.findAll().stream()
-                .map(student -> new Student(student.getId(),
-                        StringUtils.capitalize(student.getName()),
+                .map(student -> new Student(student.getId(),//creating a new student from database student
+                        StringUtils.capitalize(student.getName()),//the capitalizing a first letter of student's name
                         student.getAge()))
-                .filter(student -> student.getName().startsWith("А"))
-                .sorted(Comparator.comparing(student -> student.getName()))
-                .collect(Collectors.toList());
+                .filter(student -> student.getName().startsWith("А"))//filter students by first letter "A" of the name
+                .sorted(Comparator.comparing(student -> student.getName()))//the sorting in alphabetical order
+                .collect(Collectors.toList()); //puts the result to list
     }
 
+    /**
+     * The method returns average age of students using StreamAPI.
+     */
     public double getMiddleAgeOfStudents() {
+        logger.debug("Called method getMiddleAgeOfStudents");
         return studentRepository.findAll().stream()
-                .mapToDouble(Student::getAge)
-                .average()
-                .orElse(0d);
+                .mapToDouble(Student::getAge)//convert students age from int to double
+                .average()//calculation of average age from all students
+                .orElse(0d);//returns the result or 0 if there is no any students ages
     }
 
+    /**
+     * The method contains two threads just to see order of executions methods into each thread.
+     * the method created for educational purposes.
+     */
     public void doStudentsThread() {
-        System.out.println("Имя 0 студента: " + studentRepository.findAll().get(0).getName());
-        System.out.println("Имя 1 студента: " + studentRepository.findAll().get(1).getName());
+        logger.debug("Called method doStudentsThread");
+        System.out.println("Name of the 0 student: " + studentRepository.findAll().get(0).getName());
+        System.out.println("Name of the 1st student: " + studentRepository.findAll().get(1).getName());
 
-        Thread thread1 = new Thread(() -> {
-            System.out.println("Имя 2 студента: " + studentRepository.findAll().get(2).getName());
-            System.out.println("Имя 3 студента: " + studentRepository.findAll().get(3).getName());
+        Thread thread1 = new Thread(() -> {//Threat object creating.
+            System.out.println("Name of the 2nd student: " + studentRepository.findAll().get(2).getName());
+            System.out.println("Name of the 3rd student: " + studentRepository.findAll().get(3).getName());
         });
-        thread1.start();
+        thread1.start();//Thread starting
 
         Thread thread2 = new Thread(() -> {
-            System.out.println("Имя 4 студента: " + studentRepository.findAll().get(4).getName());
-            System.out.println("Имя 5 студента: " + studentRepository.findAll().get(5).getName());
+            System.out.println("Name of the 4th student: " + studentRepository.findAll().get(4).getName());
+            System.out.println("Name of the 5th student: " + studentRepository.findAll().get(5).getName());
         });
         thread2.start();
     }
 
+    /**
+     * The method contains two threads with thread synchronization.
+     */
     public void doSynchronizedStudentsThread() {
-        System.out.println("Имя 0 студента: " + studentRepository.findAll().get(0).getName());
-        System.out.println("Имя 1 студента: " + studentRepository.findAll().get(1).getName());
+        logger.debug("Called method doSynchronizedStudentsThread");
+        System.out.println("Name of the 0 student: " + studentRepository.findAll().get(0).getName());
+        System.out.println("Name of the 1st student: " + studentRepository.findAll().get(1).getName());
 
         Thread thread1 = new Thread(() -> {
-            synchronized (StudentService.class){
-            System.out.println("Имя 2 студента: " + studentRepository.findAll().get(2).getName());}
-            synchronized (StudentService.class){
-            System.out.println("Имя 3 студента: " + studentRepository.findAll().get(3).getName());}
+            synchronized (StudentService.class) {/*The synchronized method in this code locks access to
+                                                    a specific block of code simultaneously for multiple threads.*/
+                System.out.println("Name of the 2nd student: " + studentRepository.findAll().get(2).getName());
+            }
+            synchronized (StudentService.class) {
+                System.out.println("Name of the 3rd student: " + studentRepository.findAll().get(3).getName());
+            }
         });
         thread1.start();
 
         Thread thread2 = new Thread(() -> {
-            synchronized (StudentService.class){
-            System.out.println("Имя 4 студента: " + studentRepository.findAll().get(4).getName());}
-            synchronized (StudentService.class){
-            System.out.println("Имя 5 студента: " + studentRepository.findAll().get(5).getName());}
+            synchronized (StudentService.class) {
+                System.out.println("Name of the 4th student: " + studentRepository.findAll().get(4).getName());
+            }
+            synchronized (StudentService.class) {
+                System.out.println("Name of the 5th student: " + studentRepository.findAll().get(5).getName());
+            }
         });
         thread2.start();
     }

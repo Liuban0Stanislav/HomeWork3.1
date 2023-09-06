@@ -5,7 +5,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-@OpenAPIDefinition
+@OpenAPIDefinition //annotation for connecting Swagger to the project
 public class Application {
 
     public static void main(String[] args) {

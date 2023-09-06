@@ -37,11 +37,11 @@ public class StudentService {
         return studentRepository.findAll();
     }
 
-    public List<Student> getStudentsAccordingAge(int age) {
+    public Collection<Student> getStudentsAccordingAge(int age) {
         return studentRepository.findStudentByAge(age);
     }
 
-    public List<Student> findStudentByAgeBetween(int minAge, int maxAge){
+    public Collection<Student> findStudentByAgeBetween(int minAge, int maxAge){
         return studentRepository.findStudentByAgeBetween(minAge, maxAge);
     }
 
@@ -49,15 +49,15 @@ public class StudentService {
         return studentRepository.findStudentByFaculty(faculty);
     }
 
-    public List<Integer> getQuantityOfAllStudents() {
+    public Integer getQuantityOfAllStudents() {
         return studentRepository.getQuantityOfAllStudents();
     }
 
-    public List<Double> getAverageAge() {
+    public Double getAverageAge() {
         return studentRepository.getAverageAge();
     }
 
-    public List<FiveLastStudents> getFiveLastStudents() {
+    public Collection<FiveLastStudents> getFiveLastStudents() {
         return studentRepository.getFiveLastStudents();
     }
 

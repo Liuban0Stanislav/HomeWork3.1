@@ -118,19 +118,21 @@ public class StudentService {
      * the method created for educational purposes.
      */
     public void doStudentsThread() {
+        List<Student>studentsList = studentRepository.findAll();
         logger.debug("Called method doStudentsThread");
-        System.out.println("Name of the 0 student: " + studentRepository.findAll().get(0).getName());
-        System.out.println("Name of the 1st student: " + studentRepository.findAll().get(1).getName());
+        logger.debug("Name of the 0 student: {}", studentsList.get(0).getName());
+        logger.debug("Name of the 1st student: {}", studentsList.get(1).getName());
 
         Thread thread1 = new Thread(() -> {//Threat object creating.
-            System.out.println("Name of the 2nd student: " + studentRepository.findAll().get(2).getName());
-            System.out.println("Name of the 3rd student: " + studentRepository.findAll().get(3).getName());
+            logger.debug("Name of the 2nd student: {}", studentsList.get(2).getName());
+            logger.debug("Name of the 3rd student: {}", studentsList.get(3).getName());
+            System.out.println();
         });
         thread1.start();//Thread starting
 
         Thread thread2 = new Thread(() -> {
-            System.out.println("Name of the 4th student: " + studentRepository.findAll().get(4).getName());
-            System.out.println("Name of the 5th student: " + studentRepository.findAll().get(5).getName());
+            logger.debug("Name of the 4th student: {}", studentsList.get(4).getName());
+            logger.debug("Name of the 5th student: {}", studentsList.get(5).getName());
         });
         thread2.start();
     }

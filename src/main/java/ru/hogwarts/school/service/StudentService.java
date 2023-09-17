@@ -18,6 +18,8 @@ import java.util.stream.Stream;
 public class StudentService {
     private StudentRepository studentRepository;
     Logger logger = LoggerFactory.getLogger(StudentService.class);
+    private int counter = 0;
+    private List<Student> studentsList;
 
 
     public StudentService(StudentRepository studentRepository) {
@@ -118,7 +120,7 @@ public class StudentService {
      * the method created for educational purposes.
      */
     public void doStudentsThread() {
-        List<Student>studentsList = studentRepository.findAll();
+        studentsList = studentRepository.findAll();
         logger.debug("Called method doStudentsThread");
         logger.debug("Name of the 0 student: {}", studentsList.get(0).getName());
         logger.debug("Name of the 1st student: {}", studentsList.get(1).getName());
@@ -141,29 +143,37 @@ public class StudentService {
      * The method contains two threads with thread synchronization.
      */
     public void doSynchronizedStudentsThread() {
+        studentsList = studentRepository.findAll();
+
         logger.debug("Called method doSynchronizedStudentsThread");
-        System.out.println("Name of the 0 student: " + studentRepository.findAll().get(0).getName());
-        System.out.println("Name of the 1st student: " + studentRepository.findAll().get(1).getName());
+        getLogStudent(counter);
+        getLogStudent(counter);
 
         Thread thread1 = new Thread(() -> {
-            synchronized (StudentService.class) {/*The synchronized method in this code locks access to
-                                                    a specific block of code simultaneously for multiple threads.*/
-                System.out.println("Name of the 2nd student: " + studentRepository.findAll().get(2).getName());
+            synchronized (StudentService.class) {
+                getLogStudent(counter);
             }
             synchronized (StudentService.class) {
-                System.out.println("Name of the 3rd student: " + studentRepository.findAll().get(3).getName());
+                getLogStudent(counter);
             }
         });
         thread1.start();
 
         Thread thread2 = new Thread(() -> {
             synchronized (StudentService.class) {
-                System.out.println("Name of the 4th student: " + studentRepository.findAll().get(4).getName());
+                getLogStudent(counter);
             }
             synchronized (StudentService.class) {
-                System.out.println("Name of the 5th student: " + studentRepository.findAll().get(5).getName());
+                getLogStudent(counter);
             }
         });
         thread2.start();
     }
+
+    public void getLogStudent(int counter) {
+        logger.debug("Called method getLogStudent");
+            logger.debug("Name of the {} student: {}", counter, studentsList.get(counter).getName());
+            this.counter++;
+    }
+
 }

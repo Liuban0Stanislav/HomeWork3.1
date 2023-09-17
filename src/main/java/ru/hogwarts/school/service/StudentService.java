@@ -122,19 +122,18 @@ public class StudentService {
     public void doStudentsThread() {
         studentsList = studentRepository.findAll();
         logger.debug("Called method doStudentsThread");
-        logger.debug("Name of the 0 student: {}", studentsList.get(0).getName());
-        logger.debug("Name of the 1st student: {}", studentsList.get(1).getName());
+        getLogStudent(counter);
+        getLogStudent(counter);
 
         Thread thread1 = new Thread(() -> {//Threat object creating.
-            logger.debug("Name of the 2nd student: {}", studentsList.get(2).getName());
-            logger.debug("Name of the 3rd student: {}", studentsList.get(3).getName());
-            System.out.println();
+            getLogStudent(counter);
+            getLogStudent(counter);
         });
         thread1.start();//Thread starting
 
         Thread thread2 = new Thread(() -> {
-            logger.debug("Name of the 4th student: {}", studentsList.get(4).getName());
-            logger.debug("Name of the 5th student: {}", studentsList.get(5).getName());
+            getLogStudent(counter);
+            getLogStudent(counter);
         });
         thread2.start();
     }
@@ -171,7 +170,6 @@ public class StudentService {
     }
 
     public void getLogStudent(int counter) {
-        logger.debug("Called method getLogStudent");
             logger.debug("Name of the {} student: {}", counter, studentsList.get(counter).getName());
             this.counter++;
     }

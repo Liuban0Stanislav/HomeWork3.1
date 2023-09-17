@@ -172,6 +172,7 @@ public class StudentService {
     public void getLogStudent(int counter) {
             logger.debug("Name of the {} student: {}", counter, studentsList.get(counter).getName());
             this.counter++;
+            if(this.counter == 6) this.counter = 0;
     }
 
 }
